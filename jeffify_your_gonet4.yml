@@ -100,7 +100,7 @@
           disabled: True
 
       - name: Comment out cron replacement in rc.loca
-          replace:
+        replace:
           dest: /etc/rc.local
           regexp: "su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
           replace: "#su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
