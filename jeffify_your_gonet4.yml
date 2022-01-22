@@ -25,13 +25,13 @@
            directory mask = 0777
            public = yes
   
-       - name: Get gonet4 repo from GitHub
-         git: 
-           dest: /home/pi/Tools/git_repo
-           repo: "https://github.com/Wied58/gonet4.git"
-           update: yes
-           force: yes
-           version: "main"
+      - name: Get gonet4 repo from GitHub
+        git: 
+          dest: /home/pi/Tools/git_repo
+          repo: "https://github.com/Wied58/gonet4.git"
+          update: yes
+          force: yes
+          version: "main"
 
       - name: Change owership and permissions
         file:
