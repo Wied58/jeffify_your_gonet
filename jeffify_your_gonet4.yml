@@ -7,31 +7,31 @@
   tasks:
   
 
-    - name: Install Samba
-      apt:
-        name: samba
-        state: present
+      - name: Install Samba
+        apt:
+          name: samba
+          state: present
 
-    - name: Update smb.conf
-      blockinfile:
-        dest: "/etc/samba/smb.conf"
-        block: |
-         [pi]
-         path = /home/pi
-         only guest = no
-         browsable = yes
-         writeable = yes
-         create mask = 0777
-         directory mask = 0777
-         public = yes
-
-      - name: Get gonet4 repo from GitHub
-        git: 
-          dest: /home/pi/Tools/git_repo
-          repo: "https://github.com/Wied58/gonet4.git"
-          update: yes
-          force: yes
-          version: "main"
+      - name: Update smb.conf
+        blockinfile:
+          dest: "/etc/samba/smb.conf"
+          block: |
+           [pi]
+           path = /home/pi
+           only guest = no
+           browsable = yes
+           writeable = yes
+           create mask = 0777
+           directory mask = 0777
+           public = yes
+  
+       - name: Get gonet4 repo from GitHub
+         git: 
+           dest: /home/pi/Tools/git_repo
+           repo: "https://github.com/Wied58/gonet4.git"
+           update: yes
+           force: yes
+           version: "main"
 
       - name: Change owership and permissions
         file:
