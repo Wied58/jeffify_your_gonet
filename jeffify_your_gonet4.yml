@@ -1,0 +1,95 @@
+--- 
+- 
+  hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+  
+
+    - name: Install Samba
+      apt:
+        name: samba
+        state: present
+
+    - name: Update smb.conf
+      blockinfile:
+        dest: "/etc/samba/smb.conf"
+        block: |
+         [pi]
+         path = /home/pi
+         only guest = no
+         browsable = yes
+         writeable = yes
+         create mask = 0777
+         directory mask = 0777
+         public = yes
+
+      - name: Get gonet4 repo from GitHub
+        git: 
+          dest: /home/pi/Tools/git_repo
+          repo: "https://github.com/Wied58/gonet4.git"
+          update: yes
+          force: yes
+          version: "main"
+
+      - name: Change owership and permissions
+        file:
+           path: /home/pi/Tools/git_repo
+           state: directory
+           owner: pi 
+           group: pi
+           # when specifying mode using octal numbers, add a leading 0
+           mode: 0755
+           recurse: yes
+
+      - name: Ansible register variable basic example
+        #shell: "git --git-dir /home/pi/Tools/git_repo/.git log --pretty=oneline --decorate | head -1 | awk '{print substr($1,1,5)}'"
+        shell: echo "20."`git --git-dir /home/pi/Tools/git_repo/.git log --pretty=oneline --decorate | head -1 | awk '{print substr($1,1,5)}'`
+        args:
+          #chdir: "/home/pi/Tools/Version"
+        register: new_version
+   
+      - debug:
+          var: new_version.stdout
+
+
+      - name: empty dest directory 
+        file:
+          state: absent
+          path: /home/pi/Tools/Version/
+      
+      - name: recreate directory 
+        file:
+          state: directory
+          path: /home/pi/Tools/Version/
+          owner: pi
+          group: pi
+          mode: 0777
+      
+      - name: ensure file exists
+        copy:
+          content: ""
+          dest: "/home/pi/Tools/Version/{{ new_version.stdout }}"
+          force: yes
+          owner: pi
+          group: pi
+          mode: 0755
+
+
+      - name: Copy gonet4.py from git_repo to Camera
+        copy:
+          src: /home/pi/Tools/git_repo/
+          dest: /home/pi/Tools/Camera/
+          owner: pi
+          group: pi
+          mode: 0775
+
+        
+      - name: Update .bashrc
+        blockinfile: 
+           dest: "/home/pi/.bashrc"
+           block: |
+             alias pull_gonet='ansible-pull -d /home/pi/pull -i 'localhost,' -U https://github.com/Wied58/pull_gonet4_from_git pull_gonet4_from_git.yml'
+   
+
