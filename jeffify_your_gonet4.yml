@@ -92,4 +92,18 @@
            block: |
              alias pull_gonet='ansible-pull -d /home/pi/pull -i 'localhost,' -U https://github.com/Wied58/pull_gonet4_from_git pull_gonet4_from_git.yml'
    
+      - name: comment out gonet cron job
+        cron:
+          name: "gonet"
+          job: "*/5 * * * * python3 /home/pi/Tools/Camera/gonet4.py &"
+          state: present
+          disabled: True
+
+      - name: Comment out cron replacement in rc.loca
+          replace:
+          dest: /etc/rc.local
+          regexp: "su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
+          replace: "#su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
+
+
 
