@@ -59,14 +59,14 @@
           group: pi
           mode: 0775
 
-      - name: Get gonet4 repo from GitHub
-        git: 
-          dest: /home/pi/Tools/git_repo
-          repo: "https://github.com/Wied58/gonet4.git"
-          update: yes
-          force: yes
-          depth: 5
-          version: "main"
+#      - name: Get gonet4 repo from GitHub
+#        git: 
+#          dest: /home/pi/Tools/git_repo
+#          repo: "https://github.com/Wied58/gonet4.git"
+#          update: yes
+#          force: yes
+#          depth: 5
+#          version: "main"
 
 
 ############################################
