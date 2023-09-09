@@ -38,7 +38,7 @@
           state: present
 
 ############################################
-# Pull Repo from github, copy to /tools/Camera. and set ownership and permissions
+# Pull gonet Repo from github, copy to /tools/Camera. and set ownership and permissions
 ###########################################
 
       - name: Get gonet4 repo from GitHub
@@ -68,15 +68,46 @@
           group: pi
           mode: 0775
 
-#      - name: Get gonet4 repo from GitHub
-#        git: 
-#          dest: /home/pi/Tools/git_repo
-#          repo: "https://github.com/Wied58/gonet4.git"
-#          update: yes
-#          force: yes
-#          depth: 5
-#          version: "main"
+      - name: Delete content & directory
+        ansible.builtin.file:
+          state: absent
+          path: /home/pi/Tools/git_repo/
 
+############################################
+# Pull FectGPS  Repo from github, copy to /tools/Camera. and set ownership and permissions
+###########################################
+
+      - name: Get FetchGPS repo from GitHub
+        git: 
+          dest: /home/pi/Tools/git_repo
+          repo: "https://github.com/Wied58/FetchGPS.git
+          update: yes
+          force: yes
+          depth: 5
+          version: "main"
+
+      - name: Change owership and permissions
+        file:
+           path: /home/pi/Tools/git_repo
+           state: directory
+           owner: pi 
+           group: pi
+           # when specifying mode using octal numbers, add a leading 0
+           mode: 0755
+           recurse: yes
+
+      - name: Copy gonet4.py from git_repo to Camera
+        copy:
+          src: /home/pi/Tools/git_repo/
+          dest: /home/pi/Tools/FetchGPS/
+          owner: pi
+          group: pi
+          mode: 0775
+
+      - name: Delete content & directory
+        ansible.builtin.file:
+          state: absent
+          path: /home/pi/Tools/git_repo/
 
 ############################################
 # Set the version number to git hash
@@ -131,7 +162,8 @@
 
       - name: Comment out cron replacement in rc.loca
         replace:
-          dest: /etc/rc.local
+          #dest: /etc/rc.local
+          dest: /home/pi/Tools/Autostart/Startup.sh
           regexp: "su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
           replace: "#su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
 
