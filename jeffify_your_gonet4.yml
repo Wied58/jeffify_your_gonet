@@ -29,6 +29,15 @@
            public = yes
   
 ############################################
+# Install Exiftool
+###########################################
+
+      - name: Install Exiftool
+        apt:
+          name: libimage-exiftool-perl
+          state: present
+
+############################################
 # Pull Repo from github, copy to /tools/Camera. and set ownership and permissions
 ###########################################
 
