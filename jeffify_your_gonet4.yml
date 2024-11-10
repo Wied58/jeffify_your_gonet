@@ -105,7 +105,7 @@
           mode: 0775
 
       - name: Delete content & directory
-        ansible.builtin.file:
+        file:
           state: absent
           path: /home/pi/Tools/git_repo/
 
