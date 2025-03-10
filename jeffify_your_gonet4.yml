@@ -160,10 +160,9 @@
           state: present
           disabled: True
 
-      - name: Comment out cron replacement in rc.loca
+      - name: Comment out cron replacement 
         replace:
-          #dest: /etc/rc.local
-          dest: /home/pi/Tools/Autostart/Startup.sh
+          dest: /home/pi/Tools/Crontab/CronBackup.txt
           regexp: "su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
           replace: "#su pi -c 'crontab /home/pi/Tools/Crontab/CronBackup.txt'"
 
